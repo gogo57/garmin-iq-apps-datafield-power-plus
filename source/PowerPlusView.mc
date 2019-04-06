@@ -22,6 +22,10 @@ class PowerPlusView extends Ui.DataField {
 	var mMaxPowerValX		=	0	;
 	var mMaxPowerValY		=	0	;
 	
+	var store  = new [10];
+    var pointer = 0;
+    var floating = 0;
+	
 	
 	private var 
 		screenCenterX	= 0,
@@ -35,7 +39,12 @@ class PowerPlusView extends Ui.DataField {
 				model = "???";
 					
     function initialize() {
-        DataField.initialize()		;		        
+    var i;
+        DataField.initialize()		;
+        for (i=0;i<10;i	+=1)
+        {
+        	store[i] = 0;
+        }	        
     }
 
 
@@ -101,18 +110,18 @@ class PowerPlusView extends Ui.DataField {
 				break;
 			
 			case "edge_1000":		
-				mPowerLabelX		=	screenCenterX	-	24	;
+				mPowerLabelX		=	screenCenterX	-	16	;
 				mPowerLabelY		=	screenCenterY	-	40	;
-				mAvgPowerLabelX		=	screenCenterX	+	38	;
+				mAvgPowerLabelX		=	screenCenterX	+	30	;
 				mAvgPowerLabelY		=	screenCenterY	-	40	;				
-				mMaxPowerLabelX		=	screenCenterX	+	34	;
+				mMaxPowerLabelX		=	screenCenterX	+	30	;
 				mMaxPowerLabelY		=	screenCenterY	+	00	;
 				  
 				mPowerValX			=	screenCenterX	+	15	;
 				mPowerValY			=	screenCenterY	-	20	;
-				mAvgPowerValX		=	screenCenterX	+	24	;
+				mAvgPowerValX		=	screenCenterX	+	28	;
 				mAvgPowerValY		=	screenCenterY	-	26	;
-				mMaxPowerValX		=	screenCenterX	+	24	;
+				mMaxPowerValX		=	screenCenterX	+	28	;
 				mMaxPowerValY		=	screenCenterY	+	16	;       		
 				break;
 		}
@@ -200,7 +209,9 @@ class PowerPlusView extends Ui.DataField {
 
     // Display the value you computed here. This will be called
     // once a second when the data field is visible.
-    function onUpdate(dc) {
+     function onUpdate(dc) {
+    	var agval;
+    
         // Set the background color
         View.findDrawableById("Background").setColor(getBackgroundColor());
 
@@ -218,7 +229,15 @@ class PowerPlusView extends Ui.DataField {
             avgpower.setColor(Gfx.COLOR_BLACK);
 			maxpower.setColor(Gfx.COLOR_BLACK);
         }
-
+		floating -= store[pointer];
+		floating += mPowerValue;
+		store[pointer] = mPowerValue;
+		pointer += 1;
+		agval = floating / 10;
+		if (pointer >= 10)
+		{
+			pointer = 0;
+		}
         maxpower.setColor(Gfx.COLOR_DK_RED);        
 		
 		if( mPowerValue > mAvgPowerValue){
@@ -230,7 +249,7 @@ class PowerPlusView extends Ui.DataField {
        
         power		.setText		(mPowerValue.format		("%d"))		;
         avgpower	.setText		(mAvgPowerValue.format	("%d"))		;
-        maxpower	.setText		(mMaxPowerValue.format	("%d"))		;        
+        maxpower	.setText		(agval.format	("%d"))		;        
 
         // Call parent's onUpdate(dc) to redraw the layout
         View.onUpdate(dc);

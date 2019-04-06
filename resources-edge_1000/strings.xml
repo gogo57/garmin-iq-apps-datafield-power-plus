@@ -1,6 +1,6 @@
 <strings>
-    <string id="AppName">Power-Plus</string>
+    <string id="AppName">Power-Average10</string>
     <string id="powerlabel">Power</string>
     <string id="avgpowerlabel">avg</string>
-    <string id="maxpowerlabel">max</string>    
+    <string id="maxpowerlabel">av10</string>    
 </strings>
